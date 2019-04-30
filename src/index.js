@@ -58,7 +58,10 @@ class Game extends React.Component {
         }
       ],
       sIsNext: true,
-      stepNumber: 0
+      stepNumber: 0,
+      row: [0],
+      col: [0],
+      isSelected: Array(9).fill(false)
     };
   }
 
@@ -77,14 +80,20 @@ class Game extends React.Component {
         }
       ]),
       stepNumber: history.length,
-      xIsNext: !this.state.xIsNext
+      xIsNext: !this.state.xIsNext,
+      col: this.state.col.concat((i % 3) + 1),
+      row: this.state.row.concat(Math.floor(i / 3) + 1),
+      isSelected: Array(9).fill(false)
     });
   }
 
   jumpTo(step) {
+    const isSelectedArr = this.state.isSelected.slice();
+    isSelectedArr[step] = true;
     this.setState({
       stepNumber: step,
-      xIsNext: step % 2 === 0
+      xIsNext: step % 2 === 0,
+      isSelected: isSelectedArr
     });
   }
 
@@ -94,10 +103,30 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
-      const desc = move ? "Go to move #" + move : "Go to game start";
+      const desc = move
+        ? "Go to move #" +
+          move +
+          "(" +
+          this.state.row[move] +
+          "," +
+          this.state.col[move] +
+          ")"
+        : "Go to game start";
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button
+            id={move}
+            className={
+              this.state.isSelected[move]
+                ? "btn btn-primary btn-sm m-2"
+                : "btn btn-secondary m-2 btn-sm"
+            }
+            onClick={() => {
+              this.jumpTo(move);
+            }}
+          >
+            {desc}
+          </button>
         </li>
       );
     });
