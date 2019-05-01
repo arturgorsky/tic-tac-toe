@@ -15,36 +15,40 @@ function Square(props) {
   );
 }
 
+function Toggle(props) {
+  return (
+    <button
+      onClick={() => {
+        props.onClick();
+      }}
+    >
+      List display order (Ascending/Descending)
+    </button>
+  );
+}
+
 class Board extends React.Component {
   renderSquare(i) {
     return (
       <Square
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
+        id={i}
       />
     );
   }
 
   render() {
-    return (
-      <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    );
+    var rows = [];
+    let squares = [];
+    for (let i = 0; i < 3; i++) {
+      for (let k = 0; k < 3; k++) {
+        squares.push(this.renderSquare(k + i * 3));
+      }
+      rows.push(<div className="board-row">{squares}</div>);
+      squares = [];
+    }
+    return <div>{rows}</div>;
   }
 }
 
@@ -61,7 +65,8 @@ class Game extends React.Component {
       stepNumber: 0,
       row: [0],
       col: [0],
-      isSelected: Array(9).fill(false)
+      isSelected: Array(9).fill(false),
+      isListAscending: true
     };
   }
 
@@ -97,6 +102,12 @@ class Game extends React.Component {
     });
   }
 
+  handleToggle() {
+    this.setState({
+      isListAscending: this.state.isListAscending ? false : true
+    });
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -112,6 +123,7 @@ class Game extends React.Component {
           this.state.col[move] +
           ")"
         : "Go to game start";
+
       return (
         <li key={move}>
           <button
@@ -130,6 +142,11 @@ class Game extends React.Component {
         </li>
       );
     });
+    if (!this.state.isListAscending) {
+      moves.sort((a, b) => {
+        return b.key - a.key;
+      });
+    }
 
     let status;
     if (winner) {
@@ -144,6 +161,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <Toggle onClick={() => this.handleToggle()} />
           <ol>{moves}</ol>
         </div>
       </div>
