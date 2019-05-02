@@ -4,7 +4,7 @@ import "./index.css";
 
 function Square(props) {
   const winningSquareStyle = {
-    backgroundColor: "red"
+    backgroundColor: "blue"
   };
   return (
     <button
