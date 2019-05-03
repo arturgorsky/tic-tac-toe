@@ -154,9 +154,13 @@ class Game extends React.Component {
 
     let status;
     if (winner) {
-      status = "Winner: " + winner;
+      if (winner.squares) {
+        status = <h1>{"Winner: " + winner.squares}</h1>;
+      } else {
+        status = <h1>{"Draw!!!"}</h1>;
+      }
     } else {
-      status = "Next player: " + (this.state.xIsNext ? "X" : "O");
+      status = <h1>{"Next player: " + (this.state.xIsNext ? "X" : "O")}</h1>;
     }
     return (
       <div className="game">
@@ -197,9 +201,24 @@ function calculateWinner(squares) {
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
       return {
         squares: squares[a],
-        winningSquares: lines[i]
+        winningSquares: lines[i],
+        isDraw: null
       };
     }
+  }
+  let isDraw = true;
+  for (let k = 0; k < 9; k++) {
+    if (squares[k] === null) {
+      isDraw = false;
+    }
+  }
+  if (isDraw) {
+    console.log("Draw!!!");
+    return {
+      squares: null,
+      winningSquares: [],
+      isDraw: true
+    };
   }
   return null;
 }
