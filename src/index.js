@@ -25,6 +25,7 @@ function Toggle(props) {
       onClick={() => {
         props.onClick();
       }}
+      className="btn btn-primary btn-xs m-2"
     >
       List display order (Ascending/Descending)
     </button>
@@ -130,19 +131,16 @@ class Game extends React.Component {
 
       return (
         <li key={move}>
-          <button
+          <a
+            href="#"
             id={move}
-            className={
-              this.state.isSelected[move]
-                ? "btn btn-primary btn-sm m-2"
-                : "btn btn-secondary m-2 btn-sm"
-            }
+            className={this.state.isSelected[move] ? "a-selected" : "a-normal"}
             onClick={() => {
               this.jumpTo(move);
             }}
           >
             {desc}
-          </button>
+          </a>
         </li>
       );
     });
@@ -160,18 +158,25 @@ class Game extends React.Component {
         status = <h1>{"Draw!!!"}</h1>;
       }
     } else {
-      status = <h1>{"Next player: " + (this.state.xIsNext ? "X" : "O")}</h1>;
+      status = (
+        <h1 className="player-txt">
+          {"Next player: " + (this.state.xIsNext ? "X" : "O")}
+        </h1>
+      );
     }
     return (
-      <div className="game">
-        <div className="game-board">
+      <div className="game row">
+        <div className="col-12">
+          <h1 className="game-title col-6">tic-tac-toe</h1>
+        </div>
+        <div className="game-board col-md-4">
           <Board
             squares={current.squares}
             onClick={i => this.handleClick(i)}
             winners={winner ? winner.winningSquares : []}
           />
         </div>
-        <div className="game-info">
+        <div className="game-info col-md-6">
           <div>{status}</div>
           <Toggle onClick={() => this.handleToggle()} />
           <ol>{moves}</ol>

@@ -20,17 +20,17 @@ ul {
 
 .square {
   background: #fff;
-  border: 1px solid #999;
+  border: 2px solid #999;
   float: left;
-  font-size: 24px;
+  font-size: 54px;
   font-weight: bold;
-  line-height: 34px;
-  height: 34px;
+  line-height: 54px;
+  height: 74px;
   margin-right: -1px;
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  width: 34px;
+  width: 74px;
 }
 
 .square:focus {
@@ -46,6 +46,17 @@ ul {
   flex-direction: row;
 }
 
-.game-info {
-  margin-left: 20px;
+.game-title {
+  text-align: center;
+  margin: 40px;
+  font-size: 70px;
+  color: #432285;
+}
+
+.a-normal {
+  color: #00f;
+}
+
+.a-selected {
+  color: #0f0;
 }
